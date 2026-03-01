@@ -1,0 +1,38 @@
+{
+    "name": "webext-tabs-overview",
+    "version": "0.1.0",
+    "description": "Tab overview dashboard for Chrome extensions — tab stats, memory usage, grouping visualization, and tab management panel for MV3.",
+    "author": "Zovo <hello@zovo.one>",
+    "license": "MIT",
+    "keywords": [
+        "chrome-extension",
+        "tabs",
+        "overview",
+        "dashboard",
+        "stats",
+        "memory",
+        "groups",
+        "manifest-v3",
+        "browser-extension",
+        "management"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/theluckystrike/webext-tabs-overview.git"
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "@types/chrome": "^0.0.260",
+        "typescript": "^5.3.3"
+    }
+}
