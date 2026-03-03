@@ -56,7 +56,7 @@ export class TabsOverview {
     static async getInactive(minutesThreshold: number = 30): Promise<chrome.tabs.Tab[]> {
         const tabs = await chrome.tabs.query({});
         const cutoff = Date.now() - minutesThreshold * 60000;
-        return tabs.filter((t) => !t.active && (t.lastAccessed || 0) < cutoff);
+        return tabs.filter((t) => !t.active && ((t as any).lastAccessed || 0) < cutoff);
     }
 
     /** Close all inactive tabs */
