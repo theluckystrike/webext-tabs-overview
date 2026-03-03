@@ -1,1 +1,1 @@
-export { TabsOverview, type TabStats } from './overview';
+export { TabsOverview, TabsOverviewError, TabsOverviewErrorCode, TabStats } from './overview';
