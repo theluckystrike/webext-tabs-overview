@@ -129,3 +129,7 @@ Built by [Zovo](https://zovo.one)
 - [Zovo Permissions Scanner](https://chrome.google.com/webstore/detail/zovo-permissions-scanner) - Check extension privacy grades
 
 Visit [zovo.one](https://zovo.one) for more information.
+
+---
+
+Built by [Zovo](https://zovo.one)
