@@ -1,8 +1,12 @@
 # webext-tabs-overview
 
-> Tab overview dashboard for Chrome extensions -- tab stats, domain grouping, duplicate detection, and inactive tab management for MV3.
-
+[![npm version](https://img.shields.io/npm/v/webext-tabs-overview)](https://npmjs.com/package/webext-tabs-overview)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![Discord](https://img.shields.io/badge/Discord-Zovo-blueviolet.svg?logo=discord)](https://discord.gg/zovo)
+[![Website](https://img.shields.io/badge/Website-zovo.one-blue)](https://zovo.one)
+
+> Tab overview dashboard for Chrome extensions -- tab stats, domain grouping, duplicate detection, and inactive tab management for MV3.
 
 ## Install
 
@@ -94,3 +98,19 @@ Custom error class thrown by `TabsOverview` methods.
 ## License
 
 MIT
+
+## See Also
+
+### Related Zovo Repositories
+
+- [chrome-tab-timeline](https://github.com/theluckystrike/chrome-tab-timeline) - Tab activity timeline
+- [chrome-tab-discard](https://github.com/theluckystrike/chrome-tab-discard) - Tab memory management
+- [chrome-extension-starter-mv3](https://github.com/theluckystrike/chrome-extension-starter-mv3) - Production-ready Chrome extension starter
+
+### Zovo Chrome Extensions
+
+- [Zovo Tab Manager](https://chrome.google.com/webstore/detail/zovo-tab-manager) - Manage tabs efficiently
+- [Zovo Focus](https://chrome.google.com/webstore/detail/zovo-focus) - Block distractions
+- [Zovo Permissions Scanner](https://chrome.google.com/webstore/detail/zovo-permissions-scanner) - Check extension privacy grades
+
+Visit [zovo.one](https://zovo.one) for more information.
