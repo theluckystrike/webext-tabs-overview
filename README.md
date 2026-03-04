@@ -1,161 +1,96 @@
-# webext-tabs-overview — Tab Dashboard
+# webext-tabs-overview
 
-[![npm version](https://img.shields.io/npm/v/webext-tabs-overview)](https://npmjs.com/package/webext-tabs-overview)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
-[![Chrome Web Extension](https://img.shields.io/badge/Chrome-Web%20Extension-orange.svg)](https://developer.chrome.com/docs/extensions/)
-[![CI Status](https://github.com/theluckystrike/webext-tabs-overview/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-tabs-overview/actions)
-[![Discord](https://img.shields.io/badge/Discord-Zovo-blueviolet.svg?logo=discord)](https://discord.gg/zovo)
-[![Website](https://img.shields.io/badge/Website-zovo.one-blue)](https://zovo.one)
-[![GitHub Stars](https://img.shields.io/github/stars/theluckystrike/webext-tabs-overview?style=social)](https://github.com/theluckystrike/webext-tabs-overview)
+> Tab overview dashboard for Chrome extensions -- tab stats, domain grouping, duplicate detection, and inactive tab management for MV3.
 
-> Tab stats, top domains, group by domain, find duplicates, detect and close inactive tabs.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**webext-tabs-overview** provides comprehensive tab analytics and management for Chrome extensions. Get tab statistics, find duplicates, group by domain, and automatically close inactive tabs — all with a simple API.
-
-Part of the [Zovo](https://zovo.one) developer tools family.
-
-## Features
-
-- ✅ **Tab Statistics** - Total tabs, windows, memory usage
-- ✅ **Domain Analysis** - Top domains, tab distribution
-- ✅ **Duplicate Detection** - Find and close duplicate tabs
-- ✅ **Inactive Tab Management** - Close tabs not used in X days
-- ✅ **Grouping** - Group tabs by domain or other criteria
-- ✅ **TypeScript Support** - Full type definitions included
-
-## Installation
+## Install
 
 ```bash
 npm install webext-tabs-overview
 ```
 
-## Quick Start
+## Usage
 
-```typescript
+```js
 import { TabsOverview } from 'webext-tabs-overview';
 
-// Get tab statistics
+// Get comprehensive tab statistics
 const stats = await TabsOverview.getStats();
-console.log('Total tabs:', stats.totalTabs);
-console.log('Total windows:', stats.totalWindows);
+console.log(`Total: ${stats.total}, Pinned: ${stats.pinned}, Windows: ${stats.windows}`);
+console.log(`Audible: ${stats.audible}, Muted: ${stats.muted}, Grouped: ${stats.grouped}`);
+console.log('Domains:', stats.domains);
 
-// Find duplicate tabs
-const dupes = await TabsOverview.getDuplicates();
-console.log('Duplicate URLs:', dupes);
+// Get top domains by tab count
+const topDomains = await TabsOverview.getTopDomains(5);
+topDomains.forEach(({ domain, tabs }) => console.log(`${domain}: ${tabs} tabs`));
 
-// Close inactive tabs
-const closed = await TabsOverview.closeInactive(30);
-console.log('Closed tabs:', closed);
-```
-
-## Usage Examples
-
-### Get Tab Statistics
-
-```typescript
-const stats = await TabsOverview.getStats();
-/*
-{
-  totalTabs: 45,
-  totalWindows: 5,
-  activeTabs: 30,
-  inactiveTabs: 15,
-  memoryUsage: '450MB',
-  topDomains: [
-    { domain: 'github.com', count: 12 },
-    { domain: 'stackoverflow.com', count: 8 }
-  ]
-}
-*/
-```
-
-### Group Tabs by Domain
-
-```typescript
+// Group all tabs by domain
 const groups = await TabsOverview.groupByDomain();
-/*
-{
-  'github.com': [tab1, tab2, ...],
-  'youtube.com': [tab3, tab4, ...]
-}
-*/
-```
+groups.forEach((tabs, domain) => console.log(`${domain}: ${tabs.length} tabs`));
 
-### Find Duplicate URLs
+// Find duplicate tabs (same URL open in multiple tabs)
+const dupes = await TabsOverview.getDuplicates();
+dupes.forEach((tabs, url) => console.log(`"${url}" open in ${tabs.length} tabs`));
 
-```typescript
-const duplicates = await TabsOverview.getDuplicates();
-duplicates.forEach(group => {
-  console.log(`Duplicate: ${group.url}`);
-  console.log('Tabs:', group.tabs.map(t => t.title));
-});
-```
+// Get tabs inactive for more than 30 minutes
+const inactive = await TabsOverview.getInactive(30);
+console.log(`${inactive.length} tabs inactive for 30+ minutes`);
 
-### Close Inactive Tabs
-
-```typescript
-// Close tabs not used in 7 days
-const closed = await TabsOverview.closeInactive(7);
-console.log(`Closed ${closed.length} inactive tabs`);
-```
-
-### Get Tab Timeline
-
-```typescript
-const timeline = await TabsOverview.getTimeline();
-// Returns tab activity over time for visualization
+// Close all tabs inactive for over an hour
+const result = await TabsOverview.closeInactive(60);
+console.log(`Closed ${result.closed} tabs, ${result.failed} failed`);
 ```
 
 ## API
 
-### TabsOverview Methods
+### `TabsOverview`
 
-| Method | Description |
-|--------|-------------|
-| `TabsOverview.getStats()` | Get tab statistics |
-| `TabsOverview.groupByDomain()` | Group tabs by domain |
-| `TabsOverview.getDuplicates()` | Find duplicate tabs |
-| `TabsOverview.closeInactive(days)` | Close inactive tabs |
-| `TabsOverview.getTimeline()` | Get tab activity timeline |
+All methods are static and async.
 
-## Contributing
+| Method | Parameters | Return Type | Description |
+|--------|-----------|-------------|-------------|
+| `getStats` | none | `Promise<TabStats>` | Get comprehensive statistics for all open tabs |
+| `getTopDomains` | `count?: number` (default: 10) | `Promise<Array<{ domain: string; tabs: number }>>` | Get the top domains ranked by tab count |
+| `groupByDomain` | none | `Promise<Map<string, chrome.tabs.Tab[]>>` | Group all tabs by their domain |
+| `getDuplicates` | none | `Promise<Map<string, chrome.tabs.Tab[]>>` | Find tabs with identical URLs |
+| `getInactive` | `minutesThreshold?: number` (default: 30) | `Promise<chrome.tabs.Tab[]>` | Get tabs not accessed within the given threshold |
+| `closeInactive` | `minutesThreshold?: number` (default: 30) | `Promise<{ closed: number; failed: number; errors: string[] }>` | Close all tabs inactive beyond the threshold |
 
-Contributions are welcome! Please follow these steps:
+### `TabStats`
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/tabs-feature`
-3. **Make** your changes
-4. **Test** your changes: `npm test`
-5. **Commit** your changes: `git commit -m 'Add new feature'`
-6. **Push** to the branch: `git push origin feature/tabs-feature`
-7. **Submit** a Pull Request
+Object returned by `getStats()`.
 
-## Built by Zovo
+| Property | Type | Description |
+|----------|------|-------------|
+| `total` | `number` | Total number of open tabs |
+| `pinned` | `number` | Number of pinned tabs |
+| `audible` | `number` | Number of tabs currently playing audio |
+| `muted` | `number` | Number of muted tabs |
+| `grouped` | `number` | Number of tabs in tab groups |
+| `domains` | `Record<string, number>` | Map of domain names to their tab count |
+| `windows` | `number` | Number of open browser windows |
 
-Part of the [Zovo](https://zovo.one) developer tools family — privacy-first Chrome extensions built by developers, for developers.
+### `TabsOverviewError`
 
-## See Also
+Custom error class thrown by `TabsOverview` methods.
 
-### Related Zovo Repositories
+| Property | Type | Description |
+|----------|------|-------------|
+| `message` | `string` | Human-readable error message |
+| `code` | `string` | Error code from `TabsOverviewErrorCode` |
+| `operation` | `string` | The method that threw the error |
+| `originalError` | `Error \| undefined` | The underlying Chrome API error |
 
-- [chrome-tab-search](https://github.com/theluckystrike/chrome-tab-search) - Tab search
-- [chrome-tab-sort](https://github.com/theluckystrike/chrome-tab-sort) - Tab sorting
-- [chrome-tab-discard](https://github.com/theluckystrike/chrome-tab-discard) - Tab discarding
-- [chrome-tab-groups-api](https://github.com/theluckystrike/chrome-tab-groups-api) - Tab groups
+### `TabsOverviewErrorCode`
 
-### Zovo Chrome Extensions
-
-- [Zovo Tab Manager](https://chrome.google.com/webstore/detail/zovo-tab-manager) - Manage tabs efficiently
-- [Zovo Focus](https://chrome.google.com/webstore/detail/zovo-focus) - Block distractions
-- [Zovo Permissions Scanner](https://chrome.google.com/webstore/detail/zovo-permissions-scanner) - Check extension privacy grades
-
-Visit [zovo.one](https://zovo.one) for more information.
+| Code | Description |
+|------|-------------|
+| `TABS_API_ERROR` | General Chrome Tabs API error |
+| `INVALID_TAB_ID` | Invalid parameter value |
+| `NO_TABS_FOUND` | No tabs matched the query |
+| `TAB_REMOVE_ERROR` | Failed to remove/close tabs |
 
 ## License
 
-MIT — [Zovo](https://zovo.one)
-
----
-
-*Built by developers, for developers. No compromises on privacy.*
+MIT
