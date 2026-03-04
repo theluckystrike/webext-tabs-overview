@@ -9,6 +9,8 @@
 
 > Tab overview dashboard for Chrome extensions -- tab stats, domain grouping, duplicate detection, and inactive tab management for MV3.
 
+Part of the [Zovo](https://zovo.one) developer tools family.
+
 ## Install
 
 ```bash
